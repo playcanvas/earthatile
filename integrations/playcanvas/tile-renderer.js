@@ -3,12 +3,12 @@ var TileRenderer = pc.createScript('tileRenderer');
 TileRenderer.attributes.add('apiUrl', {
     type: 'string',
     default: 'https://tile.googleapis.com/'
-})
+});
 TileRenderer.attributes.add('camera', {
     type: 'entity'
-})
+});
 
-TileRenderer.prototype.loadGlb = async function (url) {
+TileRenderer.prototype.loadGlb = function (url) {
     return new Promise((resolve, reject) => {
         const filename = new URL(url).pathname.split("/").pop();
 
@@ -35,7 +35,7 @@ TileRenderer.prototype.loadGlb = async function (url) {
 };
 
 // initialize code called once per entity
-TileRenderer.prototype.initialize = function() {
+TileRenderer.prototype.initialize = function () {
     this.selectedNode = null;
 
     const key = localStorage.getItem('tiles-api-key');
@@ -64,7 +64,7 @@ TileRenderer.prototype.initialize = function() {
     const group = new pcui.LabelGroup({
         field: textInput,
         text: 'API key:'
-    })
+    });
     overlay.append(group);
 
     const button = new pcui.Button({
@@ -86,7 +86,7 @@ TileRenderer.prototype.initialize = function() {
     textInput.focus();
 };
 
-TileRenderer.prototype.start = function(apiKey) {
+TileRenderer.prototype.start = function (apiKey) {
     const offset = this.app.root.findByName('Camera').script.flyCamera.worldOffset;
     this.entity.translate(-offset.x, -offset.y, -offset.z);
 
@@ -150,14 +150,14 @@ TileRenderer.prototype.start = function(apiKey) {
         console.log('SHOWING: ' + node.content.uri);
         const entity = nodeToEntity.get(node);
         if (entity) {
-           entity.render.enabled = true;
+            entity.render.enabled = true;
         }
     };
     const hide = (node) => {
         console.log('HIDING: ' + node.content.uri);
         const entity = nodeToEntity.get(node);
         if (entity) {
-           entity.render.enabled = false;
+            entity.render.enabled = false;
         }
     };
 
@@ -203,7 +203,7 @@ TileRenderer.prototype.renderBoundingVolume = function (node) {
         center.clone().sub(xaxis).sub(yaxis).add(zaxis).sub(offset),
         center.clone().add(xaxis).sub(yaxis).add(zaxis).sub(offset),
         center.clone().add(xaxis).add(yaxis).add(zaxis).sub(offset),
-        center.clone().sub(xaxis).add(yaxis).add(zaxis).sub(offset),
+        center.clone().sub(xaxis).add(yaxis).add(zaxis).sub(offset)
     ];
 
     // Create line segments that connect vertices of the box
@@ -236,7 +236,7 @@ TileRenderer.prototype.renderBoundingVolume = function (node) {
 };
 
 // update code called every frame
-TileRenderer.prototype.update = function(dt) {
+TileRenderer.prototype.update = function (dt) {
     if (this.tileManager && this.camera) {
         const pos = this.camera.getPosition();
         const cameraOffset = this.camera.script.flyCamera.worldOffset;

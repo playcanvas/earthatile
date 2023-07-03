@@ -26,7 +26,7 @@ FlyCamera.attributes.add('worldOffset', {
 });
 
 const Interp = {
-    quintic: (n) => Math.pow(n - 1, 5) + 1
+    quintic: n => Math.pow(n - 1, 5) + 1
 };
 
 class SmoothValue {
@@ -88,7 +88,7 @@ const constructSphericalBasis = (target, position) => {
     target.data[8] = forward.x;
     target.data[9] = forward.y;
     target.data[10] = forward.z;
-}
+};
 
 const p = new pc.Vec3();
 const m1 = new pc.Mat4();
@@ -152,11 +152,11 @@ FlyCamera.prototype.onMouseMove = function (event) {
     }
 
     if (event.dy) {
-        this.pitch.value = this.pitch.value - event.dy / 5;
+        this.pitch.value -= event.dy / 5;
     }
 
     if (event.dx) {
-        this.yaw.value = this.yaw.value - event.dx / 5;
+        this.yaw.value -= event.dx / 5;
     }
 };
 

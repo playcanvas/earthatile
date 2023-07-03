@@ -50,7 +50,7 @@ class TileManager {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        return await response.json();
+        return response.json();
     }
 
     /**
@@ -65,6 +65,9 @@ class TileManager {
 
     /**
      * Checks if a node is in the camera's view frustum.
+     *
+     * @param {object} node - The node to test.
+     * @returns {boolean} True if in view and false otherwise.
      */
     isInView(node) {
         // Implement logic here to check if the node's bounding volume is in the camera's view frustum.
@@ -74,10 +77,14 @@ class TileManager {
     }
 
     /**
-     * Checks if a node's level of detail is appropriate.
+     * Checks if a node is within the level-of-detail switch distance.
+     *
+     * @param {object} node - The node to test.
+     * @param {number[]} cameraPos - 3 dimensional array containing the camera position.
+     * @returns {boolean} True if in range and false otherwise.
      */
     isInRange(node, cameraPos) {
-        const [ bx, by, bz, xx, xy, xz, yx, yy, yz, zx, zy, zz ] = node.boundingVolume.box;
+        const [bx, by, bz, xx, xy, xz, yx, yy, yz, zx, zy, zz] = node.boundingVolume.box;
         const dx = bx - cameraPos[0];
         const dy = bz - cameraPos[1]; // NOTE: box is Z-up
         const dz = -by - cameraPos[2];
@@ -109,7 +116,7 @@ class TileManager {
                 }
 
                 const json = await this.fetchJson(url);
-                node.children = [ json.root ];
+                node.children = [json.root]; // eslint-disable-line require-atomic-updates
             }
         }
     }
@@ -185,7 +192,7 @@ class TileManager {
             if (!(this.isInView(node) && this.isInRange(node, cameraPos))) {
                 this.collapseNode(node);
             }
-            
+
             if (node.children) {
                 for (const child of node.children) {
                     if (child.children && this.isInView(child) && this.isInRange(child, cameraPos)) {
@@ -196,3 +203,5 @@ class TileManager {
         }
     }
 }
+
+export { TileManager };
