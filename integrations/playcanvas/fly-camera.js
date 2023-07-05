@@ -20,11 +20,6 @@ FlyCamera.attributes.add('mode', {
     }]
 });
 
-FlyCamera.attributes.add('worldOffset', {
-    type: 'vec3',
-    default: [3978313.573, 4968716.59, 5243.061]
-});
-
 const Interp = {
     quintic: n => Math.pow(n - 1, 5) + 1
 };
@@ -99,7 +94,8 @@ const q = new pc.Quat();
 FlyCamera.prototype.update = function (dt) {
     var app = this.app;
 
-    p.copy(this.entity.getLocalPosition()).add(this.worldOffset);
+    const offset = app.root.findByName('World').getPosition();
+    p.copy(this.entity.getLocalPosition()).sub(offset);
 
     // construct basis
     constructSphericalBasis(m1, p);
@@ -108,7 +104,18 @@ FlyCamera.prototype.update = function (dt) {
     m2.setFromEulerAngles(0, -80, 0);
     m3.mul2(m1, m2);
     q.setFromMat4(m3).invert();
-    app.scene.skyboxRotation = q;
+
+    const skyRot = app.scene.skyboxRotation;
+    if (
+        Math.abs(skyRot.x - q.x) > 0.01 ||
+        Math.abs(skyRot.y - q.y) > 0.01 ||
+        Math.abs(skyRot.z - q.z) > 0.01 ||
+        Math.abs(skyRot.w - q.w) > 0.01
+    ) {
+        // Don't call this every frame:
+        // https://github.com/playcanvas/engine/issues/5458
+        app.scene.skyboxRotation = q;
+    }
 
     // apply yaw pitch
     m2.setFromEulerAngles(this.pitch.update(dt), this.yaw.update(dt), 0);

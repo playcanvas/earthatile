@@ -87,8 +87,7 @@ TileRenderer.prototype.initialize = function () {
 };
 
 TileRenderer.prototype.start = function (apiKey) {
-    const offset = this.app.root.findByName('Camera').script.flyCamera.worldOffset;
-    this.entity.translate(-offset.x, -offset.y, -offset.z);
+    this.entity.translate(-3978313.573, -4968706.59, -5293.061); // London
 
     /** @type {Map<object, pc.Entity} */
     const nodeToEntity = new Map();
@@ -181,7 +180,7 @@ TileRenderer.prototype.start = function (apiKey) {
 };
 
 TileRenderer.prototype.renderBoundingVolume = function (node) {
-    const offset = this.camera.script.flyCamera.worldOffset;
+    const offset = this.entity.getPosition();
 
     const boundingVolume = node.boundingVolume;
 
@@ -196,14 +195,14 @@ TileRenderer.prototype.renderBoundingVolume = function (node) {
 
     // Calculate eight vertices of the box
     const vertices = [
-        center.clone().sub(xaxis).sub(yaxis).sub(zaxis).sub(offset),
-        center.clone().add(xaxis).sub(yaxis).sub(zaxis).sub(offset),
-        center.clone().add(xaxis).add(yaxis).sub(zaxis).sub(offset),
-        center.clone().sub(xaxis).add(yaxis).sub(zaxis).sub(offset),
-        center.clone().sub(xaxis).sub(yaxis).add(zaxis).sub(offset),
-        center.clone().add(xaxis).sub(yaxis).add(zaxis).sub(offset),
-        center.clone().add(xaxis).add(yaxis).add(zaxis).sub(offset),
-        center.clone().sub(xaxis).add(yaxis).add(zaxis).sub(offset)
+        center.clone().sub(xaxis).sub(yaxis).sub(zaxis).add(offset),
+        center.clone().add(xaxis).sub(yaxis).sub(zaxis).add(offset),
+        center.clone().add(xaxis).add(yaxis).sub(zaxis).add(offset),
+        center.clone().sub(xaxis).add(yaxis).sub(zaxis).add(offset),
+        center.clone().sub(xaxis).sub(yaxis).add(zaxis).add(offset),
+        center.clone().add(xaxis).sub(yaxis).add(zaxis).add(offset),
+        center.clone().add(xaxis).add(yaxis).add(zaxis).add(offset),
+        center.clone().sub(xaxis).add(yaxis).add(zaxis).add(offset)
     ];
 
     // Create line segments that connect vertices of the box
@@ -239,8 +238,8 @@ TileRenderer.prototype.renderBoundingVolume = function (node) {
 TileRenderer.prototype.update = function (dt) {
     if (this.tileManager && this.camera) {
         const pos = this.camera.getPosition();
-        const cameraOffset = this.camera.script.flyCamera.worldOffset;
-        pos.add(cameraOffset);
+        const offset = this.entity.getPosition();
+        pos.sub(offset);
         this.tileManager.update([pos.x, pos.y, pos.z]);
 
         if (this.selectedNode) {

@@ -92,7 +92,7 @@ class TileManager {
         const lenx = length(xx, xy, xz);
         const leny = length(yx, yy, yz);
         const lenz = length(zx, zy, zz);
-        const switchDist = Math.max(lenx, leny, lenz) * 4;
+        const switchDist = Math.max(lenx, leny, lenz, 100) * 4;
 
         return dist < switchDist;
     }
