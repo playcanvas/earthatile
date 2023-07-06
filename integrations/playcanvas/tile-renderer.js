@@ -160,7 +160,7 @@ TileRenderer.prototype.start = function (apiKey) {
         }
     };
 
-    this.tileManager = new TileManager(apiKey, this.apiUrl, { load, unload, show, hide });
+    this.tileManager = new earthatile.TileManager(apiKey, this.apiUrl, { load, unload, show, hide });
     this.tileManager.start();
 
     // Create a picker for debugging tile data
