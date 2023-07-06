@@ -1,3 +1,11 @@
+/**
+ * Convert a geodetic coordinate to a Cartesian coordinate.
+ *
+ * @param {number} lon - longitude.
+ * @param {number} lat - latitude.
+ * @param {number} alt - altitude.
+ * @returns {number[]} A Cartesian coordinate as [x, y, z].
+ */
 function geodeticToCartesian(lon, lat, alt) {
     // Constants for WGS84 ellipsoid
     const a = 6378137; // semi-major axis
@@ -19,6 +27,14 @@ function geodeticToCartesian(lon, lat, alt) {
     return [x, y, z];
 }
 
+/**
+ * Convert a Cartesian coordinate to a geodetic coordinate.
+ *
+ * @param {number} x - x coordinate.
+ * @param {number} y - y coordinate.
+ * @param {number} z - z coordinate.
+ * @returns {number[]} A geodetic coordinate as [longitude, latitude, altitude].
+ */
 function cartesianToGeodetic(x, y, z) {
     // Constants for WGS84 ellipsoid
     const a = 6378137; // semi-major axis
