@@ -39,6 +39,11 @@
   "eslintIgnore": [
     "integrations/playcanvas/pcui-4.0.11.min.js"
   ],
+  "files": [
+    "dist",
+    "integrations",
+    "src"
+  ],
   "devDependencies": {
     "@playcanvas/eslint-config": "^1.4.1",
     "@rollup/plugin-commonjs": "^25.0.2",
