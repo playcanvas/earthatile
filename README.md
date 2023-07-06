@@ -24,8 +24,8 @@ Earthatile is supplied with an integration for [PlayCanvas](https://playcanvas.c
 2. Copy `integrations/playcanvas/*.js` to the Asset Panel in the Editor.
 3. Create an Entity and add a Script Component.
 4. Assign `tileRenderer` and `geolocation` scripts to the Script Component.
-5. Add a Script Component to a Camera entity.
-6. Assign `flyCamera` script to the Script Component.
+5. Add a Script Component to your Camera entity.
+6. Assign the `flyCamera` script to the Script Component.
 7. Launch the scene. 🚀
 
 Alternatively, [fork this project](https://playcanvas.com/project/1074797/overview/earthatile-world-explorer).
