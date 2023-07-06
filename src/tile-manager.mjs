@@ -1,6 +1,4 @@
-function length(x, y, z) {
-    return Math.sqrt(x * x + y * y + z * z);
-}
+import { length } from './math.mjs';
 
 /**
  * Manager class for {@link https://github.com/CesiumGS/3d-tiles/tree/main/specification#readme 3D Tiles},
