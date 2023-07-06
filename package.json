@@ -5,7 +5,7 @@
   "main": "src/index.mjs",
   "scripts": {
     "build": "rollup -c",
-    "lint": "eslint src integrations",
+    "lint": "eslint --ext .js,.mjs src integrations",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -33,7 +33,7 @@
     "globals": {
       "pc": "readonly",
       "pcui": "readonly",
-      "TileManager": "readonly"
+      "earthatile": "readonly"
     }
   },
   "eslintIgnore": [
