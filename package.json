@@ -1,37 +1,39 @@
 {
-  "name": "@playcanvas/3d-tiles",
+  "name": "earthatile",
   "version": "1.0.0",
   "description": "Engine-agnostic runtime for 3D Tiles geospatial datasets",
-  "main": "src/tile-manager.js",
+  "main": "src/index.mjs",
   "scripts": {
-    "lint": "eslint src integrations",
+    "build": "rollup -c",
+    "lint": "eslint --ext .js,.mjs src integrations",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/playcanvas/3d-tiles.git"
+    "url": "git+https://github.com/playcanvas/earthatile.git"
   },
   "keywords": [
-    "webgl",
-    "webgpu",
+    "earthatile",
     "geospatial",
     "geolocation",
     "gltf",
+    "google-maps",
     "playcanvas",
-    "google-maps"
+    "webgl",
+    "webgpu"
   ],
   "author": "PlayCanvas <support@playcanvas.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/playcanvas/3d-tiles/issues"
+    "url": "https://github.com/playcanvas/earthatile/issues"
   },
-  "homepage": "https://github.com/playcanvas/3d-tiles#readme",
+  "homepage": "https://github.com/playcanvas/earthatile#readme",
   "eslintConfig": {
     "extends": "@playcanvas/eslint-config",
     "globals": {
       "pc": "readonly",
       "pcui": "readonly",
-      "TileManager": "readonly"
+      "earthatile": "readonly"
     }
   },
   "eslintIgnore": [
@@ -39,6 +41,9 @@
   ],
   "devDependencies": {
     "@playcanvas/eslint-config": "^1.4.1",
-    "eslint": "^8.44.0"
+    "@rollup/plugin-commonjs": "^25.0.2",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "eslint": "^8.44.0",
+    "rollup": "^3.26.1"
   }
 }
