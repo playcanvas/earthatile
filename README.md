@@ -6,7 +6,7 @@ Earthatile is an engine-agnostic runtime for loading and navigating [3D Tiles](h
 
 ## Getting Started
 
-Earthatile depends upon Google's Photorealistic 3D Tiles API. To access it, you need an API key. You can obtain a key by setting up a Google Cloud project with a billing account. You then need to enable the Map Tiles API. To learn more, see [Setup in Cloud Console](https://developers.google.com/maps/documentation/tile/cloud-setup).
+Earthatile depends upon [Google's Photorealistic 3D Tiles API](https://developers.google.com/maps/documentation/tile/3d-tiles). To access it, you need an API key. You can obtain a key by setting up a Google Cloud project with a billing account. You then need to enable the Map Tiles API. To learn more, see [Setup in Cloud Console](https://developers.google.com/maps/documentation/tile/cloud-setup).
 
 ### Node.js
 
