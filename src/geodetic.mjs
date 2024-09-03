@@ -1,3 +1,8 @@
+// Constants for WGS84 ellipsoid
+const a = 6378137; // semi-major axis
+const f = 1 / 298.257223563; // flattening
+const e = Math.sqrt(2 * f - f * f); // eccentricity
+
 /**
  * Convert a geodetic coordinate to a Cartesian coordinate.
  *
@@ -7,11 +12,6 @@
  * @returns {number[]} A Cartesian coordinate as [x, y, z].
  */
 function geodeticToCartesian(lon, lat, alt) {
-    // Constants for WGS84 ellipsoid
-    const a = 6378137; // semi-major axis
-    const f = 1 / 298.257223563; // flattening
-    const e = Math.sqrt(2 * f - f * f); // eccentricity
-
     // Convert degrees to radians
     lon *= (Math.PI / 180);
     lat *= (Math.PI / 180);
