@@ -45,10 +45,10 @@
     "src"
   ],
   "devDependencies": {
-    "@playcanvas/eslint-config": "^1.7.1",
-    "@rollup/plugin-commonjs": "^25.0.7",
+    "@playcanvas/eslint-config": "^1.7.4",
+    "@rollup/plugin-commonjs": "^26.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "eslint": "^8.56.0",
-    "rollup": "^4.9.1"
+    "rollup": "^4.21.2"
   }
 }

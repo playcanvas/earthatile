@@ -35,17 +35,17 @@ Geolocation.prototype.initialize = function () {
     const destInput = new pcui.TextInput();
     destInput.on('change', (value) => {
         fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${value}`)
-            .then(response => response.json())
-            .then((data) => {
-                if (data.length > 0) {
-                    const latitude = data[0].lat;
-                    const longitude = data[0].lon;
-                    this.teleport(longitude, latitude);
-                } else {
-                    console.log('No results found');
-                }
-            })
-            .catch(error => console.error('Error:', error));
+        .then(response => response.json())
+        .then((data) => {
+            if (data.length > 0) {
+                const latitude = data[0].lat;
+                const longitude = data[0].lon;
+                this.teleport(longitude, latitude);
+            } else {
+                console.log('No results found');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     });
     group = new pcui.LabelGroup({
         text: 'Destination',

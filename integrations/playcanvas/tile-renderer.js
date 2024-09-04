@@ -10,7 +10,7 @@ TileRenderer.attributes.add('camera', {
 
 TileRenderer.prototype.loadGlb = function (url) {
     return new Promise((resolve, reject) => {
-        const filename = new URL(url).pathname.split("/").pop();
+        const filename = new URL(url).pathname.split('/').pop();
 
         const asset = new pc.Asset(filename, 'container', {
             url: url
@@ -22,10 +22,10 @@ TileRenderer.prototype.loadGlb = function (url) {
                 }
             }
         });
-        asset.once('load', function (containerAsset) {
+        asset.once('load', (containerAsset) => {
             resolve(containerAsset);
         });
-        asset.once('error', function (err) {
+        asset.once('error', (err) => {
             reject(err);
         });
 
@@ -100,7 +100,7 @@ TileRenderer.prototype.start = function (apiKey) {
 
     const load = async (node) => {
         const uri = node.content.uri;
-        console.log('LOADING: ' + uri);
+        console.log(`LOADING: ${uri}`);
         const url = `${this.apiUrl}${uri}?key=${apiKey}&session=${this.tileManager.session}`;
 
         /** @type {pc.Asset} */
@@ -108,7 +108,7 @@ TileRenderer.prototype.start = function (apiKey) {
         try {
             asset = await this.loadGlb(url);
         } catch (err) {
-            console.error("An error occurred while loading the GLB:", err);
+            console.error('An error occurred while loading the GLB:', err);
         }
 
         /** @type {pc.ContainerResource} */
@@ -127,7 +127,7 @@ TileRenderer.prototype.start = function (apiKey) {
         nodeToEntity.set(node, entity);
     };
     const unload = (node) => {
-        console.log('UNLOADING: ' + node.content.uri);
+        console.log(`UNLOADING: ${node.content.uri}`);
 
         const entity = nodeToEntity.get(node);
         if (entity) {
@@ -146,14 +146,14 @@ TileRenderer.prototype.start = function (apiKey) {
         }
     };
     const show = (node) => {
-        console.log('SHOWING: ' + node.content.uri);
+        console.log(`SHOWING: ${node.content.uri}`);
         const entity = nodeToEntity.get(node);
         if (entity) {
             entity.render.enabled = true;
         }
     };
     const hide = (node) => {
-        console.log('HIDING: ' + node.content.uri);
+        console.log(`HIDING: ${node.content.uri}`);
         const entity = nodeToEntity.get(node);
         if (entity) {
             entity.render.enabled = false;
