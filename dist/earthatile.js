@@ -4,6 +4,11 @@
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.earthatile = {}));
 })(this, (function (exports) { 'use strict';
 
+    // Constants for WGS84 ellipsoid
+    const a = 6378137; // semi-major axis
+    const f = 1 / 298.257223563; // flattening
+    const e = Math.sqrt(2 * f - f * f); // eccentricity
+
     /**
      * Convert a geodetic coordinate to a Cartesian coordinate.
      *
@@ -13,11 +18,6 @@
      * @returns {number[]} A Cartesian coordinate as [x, y, z].
      */
     function geodeticToCartesian(lon, lat, alt) {
-        // Constants for WGS84 ellipsoid
-        const a = 6378137; // semi-major axis
-        const f = 1 / 298.257223563; // flattening
-        const e = Math.sqrt(2 * f - f * f); // eccentricity
-
         // Convert degrees to radians
         lon *= (Math.PI / 180);
         lat *= (Math.PI / 180);
@@ -42,23 +42,23 @@
      * @returns {number[]} A geodetic coordinate as [longitude, latitude, altitude].
      */
     function cartesianToGeodetic(x, y, z) {
-        // Constants for WGS84 ellipsoid
-        const a = 6378137; // semi-major axis
-        const f = 1 / 298.257223563; // flattening
-        const b = a * (1 - f); // semi-minor axis
-        const e = Math.sqrt(2 * f - f * f); // eccentricity
+        const e2 = e * e; // eccentricity squared
+        const precision = 1e-12; // precision value for iterative refinement
 
         const p = Math.sqrt(x * x + z * z); // distance from minor axis
-        const th = Math.atan2(a * y, b * p); // angle between p and y
 
         // Calculate longitude
         let lon = Math.atan2(-z, x);
 
-        // Calculate latitude
-        let lat = Math.atan2((y + Math.pow(e, 2) * b * Math.pow(Math.sin(th), 3)), (p - Math.pow(e, 2) * a * Math.pow(Math.cos(th), 3)));
-
-        // Calculate N, the radius of curvature in the prime vertical
-        const N = a / Math.sqrt(1 - Math.pow(e, 2) * Math.sin(lat) * Math.sin(lat));
+        // Calculate latitude iteratively
+        let lat = Math.atan2(y, p * (1 - e2)); // initial latitude approximation
+        let latPrev = Infinity;
+        let N;
+        while (Math.abs(lat - latPrev) > precision) {
+            latPrev = lat;
+            N = a / Math.sqrt(1 - e2 * Math.sin(lat) * Math.sin(lat));
+            lat = Math.atan2(y + e2 * N * Math.sin(lat), p);
+        }
 
         // Calculate altitude
         const alt = p / Math.cos(lat) - N;
@@ -169,7 +169,7 @@
             return dist < switchDist;
         }
 
-        async loadContent(node) {
+        async loadContent(node, parentNode) {
             if (node.content) {
                 const uri = node.content.uri;
                 if (uri.includes('.glb') && this.handlers.load) {
@@ -189,6 +189,10 @@
 
                     const json = await this.fetchJson(url);
                     node.children = [json.root]; // eslint-disable-line require-atomic-updates
+
+                    // Hide the parent node only when all children are loaded if fetched from a JSON file
+                    (parentNode.hideChildDependency ||= []).push(json.root);
+                    json.root.hideParent = parentNode;
                 }
             }
         }
@@ -216,13 +220,27 @@
 
                 // Initiate the loading of all child nodes
                 if (node.children) {
-                    await Promise.all(node.children.map(child => this.loadContent(child)));
+                    await Promise.all(node.children.map(child => this.loadContent(child, node)));
                 }
 
-                // Hide the expanded node's content
-                if (node.content && node.content.uri.includes('.glb')) {
+                // Hide the expanded node's content if there are no m
+                if (node.content && node.content.uri.includes('.glb') && !node.hideChildDependency) {
                     this.handlers.hide(node);
                     this.contentHidden.set(node.content.uri, true);
+                }
+
+                // Hide the parent node when all children are loaded if fetched from a JSON file
+                if (node.hideParent && node.hideParent.hideChildDependency.length) {
+                    node.hideParent.hideChildDependency = node.hideParent.hideChildDependency.filter(n => n !== node);
+                    if (node.hideParent.hideChildDependency.length === 0) {
+                        // When all children are loaded, see if the parent node should be hidden
+                        if (node.hideParent.content && node.hideParent.content.uri.includes('.glb')) {
+                            this.handlers.hide(node.hideParent);
+                            this.contentHidden.set(node.hideParent.content.uri, true);
+                        }
+                        delete node.hideParent.hideChildDependency;
+                    }
+                    delete node.hideParent;
                 }
             }
         }
