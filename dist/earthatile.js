@@ -223,7 +223,7 @@
                     await Promise.all(node.children.map(child => this.loadContent(child, node)));
                 }
 
-                // Hide the expanded node's content if there are no m
+                // Hide the expanded node's content only when there are no additional dependencies to load
                 if (node.content && node.content.uri.includes('.glb') && !node.hideChildDependency) {
                     this.handlers.hide(node);
                     this.contentHidden.set(node.content.uri, true);
