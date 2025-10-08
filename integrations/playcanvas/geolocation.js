@@ -1,4 +1,4 @@
-var Geolocation = pc.createScript('geolocation');
+const Geolocation = pc.createScript('geolocation');
 
 Geolocation.attributes.add('camera', {
     type: 'entity'

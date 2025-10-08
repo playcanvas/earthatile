@@ -1,4 +1,4 @@
-var FlyCamera = pc.createScript('flyCamera');
+const FlyCamera = pc.createScript('flyCamera');
 
 FlyCamera.attributes.add('speed', {
     type: 'number',
@@ -92,7 +92,7 @@ const m3 = new pc.Mat4();
 const q = new pc.Quat();
 
 FlyCamera.prototype.update = function (dt) {
-    var app = this.app;
+    const app = this.app;
 
     const offset = app.root.findByName('World').getPosition();
     p.copy(this.entity.getLocalPosition()).sub(offset);
@@ -123,7 +123,7 @@ FlyCamera.prototype.update = function (dt) {
     q.setFromMat4(m3);
     this.entity.setLocalRotation(q);
 
-    var speed = this.speed;
+    let speed = this.speed;
     if (app.keyboard.isPressed(pc.KEY_SHIFT)) {
         speed = this.fastSpeed;
     }

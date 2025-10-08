@@ -84,14 +84,14 @@ class TileManager {
                 this.session = params.get('session');
             }
             return url;
-        } else {
-            // URI has no parameters - add key and cached session
-            let url = `${this.apiUrl}${uri}?key=${this.apiKey}`;
-            if (this.session) {
-                url += `&session=${this.session}`;
-            }
-            return url;
         }
+        // URI has no parameters - add key and cached session
+        let url = `${this.apiUrl}${uri}?key=${this.apiKey}`;
+        if (this.session) {
+            url += `&session=${this.session}`;
+        }
+        return url;
+
     }
 
     /**
