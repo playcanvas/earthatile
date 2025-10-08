@@ -101,7 +101,15 @@ TileRenderer.prototype.start = function (apiKey) {
     const load = async (node) => {
         const uri = node.content.uri;
         console.log(`LOADING: ${uri}`);
-        const url = `${this.apiUrl}${uri}?key=${apiKey}&session=${this.tileManager.session}`;
+        
+        // Build URL with proper session handling
+        // Google's API returns URIs in two formats:
+        // 1. With session: /v1/.../file.glb?session=xxx - append &key=yyy
+        // 2. Without session: /v1/.../file.glb - append ?key=yyy&session=zzz (using cached session)
+        const hasSessionParam = uri.includes('?');
+        const url = hasSessionParam
+            ? `${this.apiUrl}${uri}&key=${apiKey}`
+            : `${this.apiUrl}${uri}?key=${apiKey}${this.tileManager.session ? `&session=${this.tileManager.session}` : ''}`;
 
         /** @type {pc.Asset} */
         let asset;

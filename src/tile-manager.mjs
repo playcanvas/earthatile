@@ -11,7 +11,11 @@ class TileManager {
     /** @type {string} */
     apiUrl;
 
-    /** @type {string} */
+    /**
+     * Cached session token from Google's API. The first tile request returns a session
+     * parameter that must be included in subsequent requests for tiles without embedded sessions.
+     * @type {string}
+     */
     session;
 
     handlers;
@@ -62,6 +66,35 @@ class TileManager {
     }
 
     /**
+     * Builds a complete URL for fetching tile content from Google's API.
+     * Google returns URIs in two formats:
+     * 1. With session: /v1/.../file?session=xxx - these are appended with &key=yyy
+     * 2. Without session: /v1/.../file - these are appended with ?key=yyy&session=zzz
+     *
+     * @param {string} uri - The URI from the tile content.
+     * @returns {string} The complete URL with API key and session parameters.
+     * @private
+     */
+    _buildTileUrl(uri) {
+        if (uri.includes('?')) {
+            // URI already has session parameter - extract and cache it
+            const url = `${this.apiUrl}${uri}&key=${this.apiKey}`;
+            if (!this.session) {
+                const params = new URLSearchParams(new URL(url).search);
+                this.session = params.get('session');
+            }
+            return url;
+        } else {
+            // URI has no parameters - add key and cached session
+            let url = `${this.apiUrl}${uri}?key=${this.apiKey}`;
+            if (this.session) {
+                url += `&session=${this.session}`;
+            }
+            return url;
+        }
+    }
+
+    /**
      * Checks if a node is in the camera's view frustum.
      *
      * @param {object} node - The node to test.
@@ -104,15 +137,7 @@ class TileManager {
                     this.handlers.hide(node);
                 }
             } else if (uri.includes('.json')) {
-                let url;
-                if (this.session) {
-                    url = `${this.apiUrl}${uri}?key=${this.apiKey}&session=${this.session}`;
-                } else {
-                    url = `${this.apiUrl}${uri}&key=${this.apiKey}`;
-                    const params = new URLSearchParams(new URL(url).search);
-                    this.session = params.get('session');
-                }
-
+                const url = this._buildTileUrl(uri);
                 const json = await this.fetchJson(url);
                 node.children = [json.root]; // eslint-disable-line require-atomic-updates
             }
@@ -194,7 +219,7 @@ class TileManager {
             if (node.children) {
                 for (const child of node.children) {
                     if (child.children && this.isInView(child) && this.isInRange(child, cameraPos)) {
-                        this.expandNode(child).catch(err => console.error(`Error expanding node: ${node.id}`, err));
+                        this.expandNode(child).catch(err => console.error('Error expanding node:', err));
                     }
                 }
             }
