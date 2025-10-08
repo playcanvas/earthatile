@@ -5,7 +5,7 @@
   "main": "src/index.mjs",
   "scripts": {
     "build": "rollup -c",
-    "lint": "eslint --ext .js,.mjs src integrations",
+    "lint": "eslint src integrations",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -28,27 +28,17 @@
     "url": "https://github.com/playcanvas/earthatile/issues"
   },
   "homepage": "https://github.com/playcanvas/earthatile#readme",
-  "eslintConfig": {
-    "extends": "@playcanvas/eslint-config",
-    "globals": {
-      "pc": "readonly",
-      "pcui": "readonly",
-      "earthatile": "readonly"
-    }
-  },
-  "eslintIgnore": [
-    "integrations/playcanvas/pcui-4.0.11.min.js"
-  ],
   "files": [
     "dist",
     "integrations",
     "src"
   ],
   "devDependencies": {
-    "@playcanvas/eslint-config": "^1.7.4",
-    "@rollup/plugin-commonjs": "^26.0.1",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "eslint": "^8.56.0",
-    "rollup": "^4.21.2"
+    "@playcanvas/eslint-config": "^2.1.0",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.2",
+    "eslint": "^9.37.0",
+    "globals": "^16.4.0",
+    "rollup": "^4.52.4"
   }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable-next-line no-var */
 var Geolocation = pc.createScript('geolocation');
 
 Geolocation.attributes.add('camera', {
