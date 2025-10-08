@@ -128,7 +128,7 @@ class TileManager {
         return dist < switchDist;
     }
 
-    async loadContent(node) {
+    async loadContent(node, parentNode) {
         if (node.content) {
             const uri = node.content.uri;
             if (uri.includes('.glb') && this.handlers.load) {
@@ -140,6 +140,10 @@ class TileManager {
                 const url = this._buildTileUrl(uri);
                 const json = await this.fetchJson(url);
                 node.children = [json.root]; // eslint-disable-line require-atomic-updates
+
+                // Hide the parent node only when all children are loaded if fetched from a JSON file
+                (parentNode.hideChildDependency ||= []).push(json.root);
+                json.root.hideParent = parentNode;
             }
         }
     }
@@ -167,13 +171,27 @@ class TileManager {
 
             // Initiate the loading of all child nodes
             if (node.children) {
-                await Promise.all(node.children.map(child => this.loadContent(child)));
+                await Promise.all(node.children.map(child => this.loadContent(child, node)));
             }
 
-            // Hide the expanded node's content
-            if (node.content && node.content.uri.includes('.glb')) {
+            // Hide the expanded node's content only when there are no additional dependencies to load
+            if (node.content && node.content.uri.includes('.glb') && !node.hideChildDependency) {
                 this.handlers.hide(node);
                 this.contentHidden.set(node.content.uri, true);
+            }
+
+            // Hide the parent node when all children are loaded if fetched from a JSON file
+            if (node.hideParent && node.hideParent.hideChildDependency.length) {
+                node.hideParent.hideChildDependency = node.hideParent.hideChildDependency.filter(n => n !== node);
+                if (node.hideParent.hideChildDependency.length === 0) {
+                    // When all children are loaded, see if the parent node should be hidden
+                    if (node.hideParent.content && node.hideParent.content.uri.includes('.glb')) {
+                        this.handlers.hide(node.hideParent);
+                        this.contentHidden.set(node.hideParent.content.uri, true);
+                    }
+                    delete node.hideParent.hideChildDependency;
+                }
+                delete node.hideParent;
             }
         }
     }
