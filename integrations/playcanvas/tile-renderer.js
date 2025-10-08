@@ -1,4 +1,5 @@
-const TileRenderer = pc.createScript('tileRenderer');
+/* eslint-disable-next-line no-var */
+var TileRenderer = pc.createScript('tileRenderer');
 
 TileRenderer.attributes.add('apiUrl', {
     type: 'string',
