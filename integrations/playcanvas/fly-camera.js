@@ -1,4 +1,5 @@
-const FlyCamera = pc.createScript('flyCamera');
+/* eslint-disable-next-line no-var */
+var FlyCamera = pc.createScript('flyCamera');
 
 FlyCamera.attributes.add('speed', {
     type: 'number',
